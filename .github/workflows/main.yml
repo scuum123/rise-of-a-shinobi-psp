@@ -18,7 +18,7 @@ jobs:
       - name: Extract game
         run: |
           mkdir game
-          unzip The_Rise_of_a_Shinobi_PSP_v4_GitHub_Build.zip -d game
+          unzip *.zip -d game
 
       - name: Build EBOOT
         run: |
