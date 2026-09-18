@@ -1,0 +1,37 @@
+name: Build PSP Game
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: pspdev/pspdev:latest
+
+    steps:
+      - name: Download project
+        uses: actions/checkout@v4
+
+      - name: Extract game
+        run: |
+          mkdir game
+          unzip The_Rise_of_a_Shinobi_PSP_v4_GitHub_Build.zip -d game
+
+      - name: Build EBOOT
+        run: |
+          cd game
+          make -j2
+
+      - name: Prepare PSP folder
+        run: |
+          mkdir -p finished/PSP/GAME/RiseShinobi
+          cp game/EBOOT.PBP finished/PSP/GAME/RiseShinobi/
+
+      - name: Upload finished game
+        uses: actions/upload-artifact@v4
+        with:
+          name: Rise-of-a-Shinobi-PSP
+          path: finished/PSP
